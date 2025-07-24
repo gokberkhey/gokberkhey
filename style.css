@@ -1,113 +1,30 @@
-body {
-  margin: 0;
-  font-family: 'Crimson Text', serif;
-  color: #2e2e1f;
-  background-color: #fefbf3;
-  position: relative;
-}
 
-.background-texture {
-  background-image: url('https://upload.wikimedia.org/wikipedia/commons/7/7d/Parchment_paper_background.jpg');
-  background-size: cover;
-  opacity: 0.15;
+#scrollToTop {
   position: fixed;
-  top: 0; left: 0;
-  width: 100vw;
-  height: 100vh;
-  z-index: -1;
-  filter: sepia(0.4) contrast(1.2);
-}
-
-header {
-  text-align: center;
-  padding: 3rem 1rem 1rem;
-  font-family: 'Playfair Display', serif;
-}
-
-header h1 {
-  font-size: 3rem;
-  margin-bottom: 0.2rem;
-}
-
-.subtitle {
+  bottom: 30px;
+  right: 30px;
+  background-color: #6e3a1b;
+  color: #fff;
   font-size: 1.2rem;
-  color: #555;
+  padding: 10px 14px;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  display: none;
+  z-index: 1000;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
 }
 
-.sidebar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 200px;
-  height: 100%;
-  background: rgba(255, 255, 245, 0.9);
-  border-right: 1px solid #d3cbb8;
-  padding: 2rem 1rem;
-  font-size: 1.1rem;
-}
-
-.sidebar ul {
-  list-style: none;
-  padding-left: 0;
-}
-
-.sidebar ul li {
-  margin-bottom: 1rem;
-}
-
-.sidebar ul li a {
-  color: #3b312b;
-  text-decoration: none;
-  transition: color 0.3s;
-}
-
-.sidebar ul li a:hover {
-  color: #8b5e3c;
-}
-
-main {
-  margin-left: 220px;
-  padding: 2rem;
-  max-width: 800px;
-}
-
-.post-card {
-  background-color: rgba(255, 255, 245, 0.92);
-  padding: 1.5rem;
-  margin-bottom: 2rem;
-  border: 1px solid #e6e0d0;
-  border-radius: 8px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-  transition: transform 0.2s;
-}
-
-.post-card:hover {
-  transform: translateY(-4px);
-}
-
-.post-card h2 {
-  font-family: 'Playfair Display', serif;
-  margin-bottom: 0.5rem;
-}
-
-.date {
-  font-size: 0.9rem;
-  color: #7a6f5e;
-}
-
-.excerpt {
-  margin: 1rem 0;
-}
-
-a {
-  color: #8b5e3c;
-  text-decoration: none;
-  font-weight: bold;
-}
-
-footer {
+.quote-box {
   text-align: center;
-  padding: 2rem;
-  font-size: 0.9rem;
-  color: #7a6f5e;
+  margin: 2rem 0;
+  font-style: italic;
+  font-size: 1.2rem;
+  color: #4c3b2a;
+  background-color: #f7f0dd;
+  padding: 1rem;
+  border-left: 5px solid #a58350;
+  border-right: 5px solid #a58350;
+  border-radius: 10px;
+  font-family: 'Crimson Text', serif;
 }
