@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Orkhon Script Table</title>
+<style>
+  :root {
+    --bg-start: #eef8fc;
+    --bg-end: #cce7f6;
+    --text: #2d2d2d;
+    --surface: #ffffff;
+    --surface-alt: #FFDD1F;
+    --accent: #0077c8;
+    --accent-hover: #005fa0;
+    --table-hover: #b3e5fc;
+    --border: #ccc;
+    --shadow: rgba(0,0,0,.1);
+    --toast-bg: rgba(0,0,0,.8);
+  }
+  [data-theme="dark"] {
+    --bg-start: #0f172a;
+    --bg-end: #1e293b;
+    --text: #e2e8f0;
+    --surface: #1e293b;
+    --surface-alt: #334155;
+    --accent: #38bdf8;
+    --accent-hover: #0ea5e9;
+    --table-hover: #334155;
+    --border: #475569;
+    --shadow: rgba(255,255,255,.05);
+    --toast-bg: rgba(255,255,255,.9);
+  }
+
+  body {
+    margin: 0;
+    padding: 0 0 80px;
+    font-family: 'Noto Sans', sans-serif;
+    background: linear-gradient(to bottom, var(--bg-start), var(--bg-end));
+    color: var(--text);
+    text-align: center;
+  }
+
+  header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    backdrop-filter: blur(6px);
+  }
+
+  nav {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .nav-btn {
+    border: none;
+    background: var(--accent);
+    color: #fff;
+    padding: 8px 14px;
+    border-radius: 6px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background .15s ease, opacity .15s ease;
+    text-decoration: none;
+  }
+  .nav-btn:hover {
+    background: var(--accent-hover);
+  }
+  .nav-btn.active {
+    opacity: 0.7;
+    pointer-events: none;
+  }
+
+  .mode-toggle {
+    border: 1px solid transparent;
+    background: transparent;
+    color: var(--text);
+    padding: 6px 12px;
+    border-radius: 9999px;
+    cursor: pointer;
+    transition: opacity .15s ease, background .15s ease;
+  }
+  .mode-toggle:hover {
+    background: rgba(0,0,0,.05);
+  }
+  [data-theme="dark"] .mode-toggle:hover {
+    background: rgba(255,255,255,.05);
+  }
+
+  h2 {
+    margin-top: 40px;
+    font-size: 36px;
+  }
+  h3 {
+    font-size: 18px;
+    color: var(--text);
+    opacity: .8;
+    margin-bottom: 20px;
+  }
+
+  .table-wrapper {
+    max-width: 1000px;
+    margin: 30px auto 20px;
+    max-height: 70vh;         /* scrollable height */
+    overflow: auto;           /* scroll */
+    border-radius: 10px;
+    box-shadow: 0 0 12px var(--shadow);
+    background: var(--surface);
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 2rem;
+    cursor: default;
+  }
+
+  thead th {
+    position: sticky;
+    top: 0;
+    background: var(--surface);
+    z-index: 2;
+    font-size: 1rem;
+    padding: 12px 8px;
+    text-transform: uppercase;
+    letter-spacing: .05em;
+    box-shadow: 0 2px 0 rgba(0,0,0,0.05);
+  }
+
+  tbody td {
+    text-align: center;
+    padding: 12px 8px;
+    transition: background .15s ease;
+    user-select: none;
+  }
+
+  tbody tr:nth-child(even) td {
+    background-color: var(--surface-alt);
+  }
+
+  tbody td:hover {
+    background: var(--table-hover) !important;
+  }
+
+  /* Composer — EXACTLY like your snippet */
+  .composer {
+    max-width: 1000px;
+    margin: 0 auto 40px;
+    text-align: left;
+  }
+
+  .composer label {
+    display: block;
+    font-weight: 600;
+    margin: 10px 0 6px;
+  }
+
+  #output {
+    width: 100%;
+    min-height: 96px;
+    font-size: 2rem;
+    line-height: 1.5;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    box-shadow: 0 0 6px rgba(0,0,0,.05) inset;
+    background: #fff;
+    color: #000; /* keep the composer text dark like in your snippet */
+  }
+
+  .buttons {
+    margin-top: 8px;
+    display: flex;
+    gap: 8px;
+  }
+
+  button {
+    border: none;
+    background: var(--accent);
+    color: #fff;
+    padding: 10px 14px;
+    border-radius: 6px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background .15s ease;
+  }
+  button:hover {
+    background: var(--accent-hover);
+  }
+
+  /* Back to top button */
+  #backToTop {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    display: none;
+    padding: 10px 14px;
+    border-radius: 50%;
+    font-size: 18px;
+    border: none;
+    background: var(--accent);
+    color: white;
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    transition: background 0.15s ease;
+    z-index: 999;
+  }
+  #backToTop:hover {
+    background: var(--accent-hover);
+  }
+
+  .toast {
+    position: fixed;
+    left: 50%;
+    bottom: 20px;
+    transform: translateX(-50%);
+    background: var(--toast-bg);
+    color: #fff;
+    padding: 10px 16px;
+    border-radius: 9999px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .2s ease;
+  }
+  .toast.show {
+    opacity: 1;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <nav>
+    <a href="index.html" class="nav-btn">Home</a>
+    <a href="yenisei.html" class="nav-btn">Yenisei</a>
+    <a href="magyar.html" class="nav-btn">Magyar</a>
+    <a href="about.html" class="nav-btn">About</a>
+  </nav>
+  <button id="modeToggle" class="mode-toggle" aria-label="Toggle dark mode">🌙 Dark</button>
+</header>
+
+<h2>The Letters In Orkhon Script</h2>
+<h3>Click any character to insert it into the box below. (You can look Yenisei versions for them and also comparison with Magyar runic scripts.)</h3>
+
+<div class="table-wrapper" role="region" aria-label="Orkhon Script Letters">
+  <table>
+    <thead>
+      <tr>
+        <th>SYLLABLES</th>
+        <th>STRONG CONSONANTS</th>
+        <th>SOFT CONSONANTS</th>
+        <th>DOUBLE CONSONANTS</th>
+        <th>UNIFIED TAMGA 1</th>
+        <th>UNIFIED TAMGA 2</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>𐰀</td>
+        <td>𐰉</td>
+        <td>𐰋</td>
+        <td>𐰨</td>
+        <td>𐰲</td>
+        <td>𐰱</td>
+      </tr>
+      <tr>
+        <td>𐰃</td>
+        <td>𐰑</td>
+        <td>𐰓</td>
+        <td>𐰦</td>
+        <td>𐰢</td>
+        <td>𐰶</td>
+      </tr>
+      <tr>
+        <td>𐰅</td>
+        <td>𐰍</td>
+        <td>𐰏</td>
+        <td>𐰡</td>
+        <td>𐰯</td>
+        <td>𐰸</td>
+      </tr>
+      <tr>
+        <td>𐰆</td>
+        <td>𐰴</td>
+        <td>𐰚</td>
+        <td></td>
+        <td>𐱁</td>
+        <td>𐰜</td>
+      </tr>
+      <tr>
+        <td>𐰇</td>
+        <td>𐰞</td>
+        <td>𐰠</td>
+        <td></td>
+        <td>𐰔</td>
+        <td>𐰿</td>
+      </tr>
+      <tr>
+        <td></td>
+        <td>𐰣</td>
+        <td>𐰤</td>
+        <td></td>
+        <td>𐰭</td>
+        <td>𐱈</td>
+      </tr>
+      <tr>
+        <td></td>
+        <td>𐰺</td>
+        <td>𐰼</td>
+        <td></td>
+        <td>𐰪</td>
+        <td>𐱇</td>
+      </tr>
+      <tr>
+        <td></td>
+        <td>𐰽</td>
+        <td>𐰾</td>
+        <td></td>
+        <td></td>
+        <td>𐰰</td>
+      </tr>
+      <tr>
+        <td></td>
+        <td>𐱃</td>
+        <td>𐱅</td>
+        <td></td>
+        <td></td>
+        <td>𐰬</td>
+      </tr>
+      <tr>
+        <td></td>
+        <td>𐰖</td>
+        <td>𐰘</td>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="composer">
+  <label for="output">Composer</label>
+  <textarea id="output" aria-live="polite" placeholder="Click letters above to add them here…"></textarea>
+  <div class="buttons">
+    <button id="copyBtn" type="button">Copy</button>
+    <button id="clearBtn" type="button">Clear</button>
+  </div>
+</div>
+
+<button id="backToTop" title="Back to Top">↑</button>
+
+<div id="toast" class="toast" role="status" aria-live="polite">Copied!</div>
+
+<script>
+  const tbody = document.querySelector('tbody');
+  const output = document.getElementById('output');
+  const copyBtn = document.getElementById('copyBtn');
+  const clearBtn = document.getElementById('clearBtn');
+  const toast = document.getElementById('toast');
+  const backToTop = document.getElementById('backToTop');
+  const modeToggle = document.getElementById('modeToggle');
+  const navLinks = document.querySelectorAll('nav a.nav-btn');
+
+  // Dark mode init
+  const savedTheme = localStorage.getItem('theme');
+  if (savedTheme) {
+    document.documentElement.setAttribute('data-theme', savedTheme);
+    updateModeToggleLabel(savedTheme);
+  } else {
+    updateModeToggleLabel('light');
+  }
+
+  modeToggle.addEventListener('click', () => {
+    const current = document.documentElement.getAttribute('data-theme') || 'light';
+    const next = current === 'light' ? 'dark' : 'light';
+    document.documentElement.setAttribute('data-theme', next);
+    localStorage.setItem('theme', next);
+    updateModeToggleLabel(next);
+  });
+
+  function updateModeToggleLabel(theme) {
+    modeToggle.textContent = theme === 'dark' ? '☀️ Light' : '🌙 Dark';
+  }
+
+  // Mark active nav link
+  const currentPath = location.pathname.split('/').pop();
+  navLinks.forEach(a => {
+    const hrefPath = a.getAttribute('href');
+    if (hrefPath === currentPath || (currentPath === '' && hrefPath === 'index.html')) {
+      a.classList.add('active');
+    }
+  });
+
+  // Append clicked character to textarea
+  tbody.addEventListener('click', (e) => {
+    const td = e.target.closest('td');
+    if (!td) return;
+    const ch = td.textContent.trim();
+    if (!ch) return;
+    output.value += ch;
+    output.focus();
+  });
+
+  // Copy to clipboard
+  copyBtn.addEventListener('click', async () => {
+    try {
+      await navigator.clipboard.writeText(output.value);
+      showToast('Copied!');
+    } catch {
+      showToast('Could not copy');
+    }
+  });
+
+  // Clear composer
+  clearBtn.addEventListener('click', () => {
+    output.value = '';
+    output.focus();
+  });
+
+  function showToast(msg) {
+    toast.textContent = msg;
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 1400);
+  }
+
+  // Back to Top logic
+  window.addEventListener('scroll', () => {
+    if (document.documentElement.scrollTop > 200) {
+      backToTop.style.display = 'block';
+    } else {
+      backToTop.style.display = 'none';
+    }
+  });
+
+  backToTop.addEventListener('click', () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+</script>
+
+</body>
+</html>
+

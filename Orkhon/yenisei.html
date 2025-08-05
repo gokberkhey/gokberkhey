@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Orkhon / Yenisei Letters RTL with RTL Composer</title>
+<style>
+  body {
+    margin: 0;
+    padding: 0 0 80px;
+    font-family: 'Noto Sans', sans-serif;
+    background: linear-gradient(to bottom, #eef8fc, #cce7f6);
+    color: #2d2d2d;
+    text-align: center;
+    direction: rtl;
+  }
+
+  h2 {
+    margin-top: 40px;
+    font-size: 36px;
+  }
+  h3 {
+    font-size: 18px;
+    color: #444;
+    margin-bottom: 20px;
+  }
+
+  .table-wrapper {
+    max-width: 1000px;
+    margin: 30px auto 20px;
+    max-height: 70vh;
+    overflow: auto;
+    border-radius: 10px;
+    box-shadow: 0 0 12px rgba(0,0,0,.1);
+    background: #fff;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 2rem;
+    cursor: default;
+  }
+
+  tbody td {
+    text-align: center;
+    padding: 12px 8px;
+    transition: background .15s ease;
+    user-select: none;
+  }
+  tbody tr:nth-child(even) td {
+    background-color: #FFDD1F;
+  }
+  tbody td:hover {
+    background: #b3e5fc !important;
+  }
+
+  /* Composer */
+  .composer {
+    max-width: 1000px;
+    margin: 0 auto 40px;
+    text-align: right;
+    direction: rtl;
+  }
+
+  .composer label {
+    display: block;
+    font-weight: 600;
+    margin: 10px 0 6px;
+  }
+
+  #output {
+    width: 100%;
+    min-height: 96px;
+    font-size: 2rem;
+    line-height: 1.5;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    box-shadow: 0 0 6px rgba(0,0,0,.05) inset;
+    background: #fff;
+    color: #000;
+    direction: rtl;
+    text-align: right;
+    resize: vertical;
+  }
+
+  .buttons {
+    margin-top: 8px;
+    display: flex;
+    gap: 8px;
+    justify-content: flex-end;
+  }
+
+  button {
+    border: none;
+    background: #0077c8;
+    color: #fff;
+    padding: 10px 14px;
+    border-radius: 6px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background .15s ease;
+  }
+  button:hover {
+    background: #005fa0;
+  }
+
+  #backToTop {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    display: none;
+    padding: 10px 14px;
+    border-radius: 50%;
+    font-size: 18px;
+    border: none;
+    background: #0077c8;
+    color: white;
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    transition: background 0.15s ease;
+    z-index: 999;
+  }
+  #backToTop:hover {
+    background: #005fa0;
+  }
+
+  .toast {
+    position: fixed;
+    left: 50%;
+    bottom: 20px;
+    transform: translateX(-50%);
+    background: rgba(0,0,0,.8);
+    color: #fff;
+    padding: 10px 16px;
+    border-radius: 9999px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .2s ease;
+  }
+  .toast.show {
+    opacity: 1;
+  }
+</style>
+</head>
+<body>
+
+<h2>Orkhon / Yenisei Letters (Right to Left)</h2>
+<h3>Click any character to insert it into the composer below.</h3>
+
+<div class="table-wrapper" role="region" aria-label="Orkhon and Yenisei letters">
+  <table>
+    <tbody>
+      <tr>
+        <td>𐰕</td><td>𐰙</td><td>𐰗</td><td>𐱆</td><td>𐱄</td><td>𐱂</td><td>𐱀</td><td>𐰻</td><td>𐰧</td><td>𐰩</td>
+      </tr>
+      <tr>
+        <td>𐰫</td><td>𐰮</td><td>𐰬</td><td>𐰥</td><td>𐰟</td><td>𐰹</td><td>𐰷</td><td>𐰝</td><td>𐰛</td><td>𐰵</td>
+      </tr>
+      <tr>
+        <td>𐰐</td><td>𐰎</td><td>𐰒</td><td>𐰳</td><td>𐰌</td><td>𐰊</td><td>𐰈</td><td>𐰄</td><td>𐰅</td><td>𐰂</td>
+      </tr>
+      <tr>
+        <td>𐰁</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="composer">
+  <label for="output">Composer</label>
+  <textarea id="output" placeholder="Click letters above to add them here…"></textarea>
+  <div class="buttons">
+    <button id="copyBtn" type="button">Copy</button>
+    <button id="clearBtn" type="button">Clear</button>
+  </div>
+</div>
+
+<button id="backToTop" aria-label="Back to top">↑</button>
+<div id="toast" class="toast" role="status" aria-live="polite">Copied!</div>
+
+<script>
+  const tbody = document.querySelector('tbody');
+  const output = document.getElementById('output');
+  const copyBtn = document.getElementById('copyBtn');
+  const clearBtn = document.getElementById('clearBtn');
+  const toast = document.getElementById('toast');
+  const backToTop = document.getElementById('backToTop');
+
+  tbody.addEventListener('click', e => {
+    const td = e.target.closest('td');
+    if (!td) return;
+    const ch = td.textContent.trim();
+    if (!ch) return;
+    output.value += ch;
+    output.focus();
+  });
+
+  copyBtn.addEventListener('click', async () => {
+    try {
+      await navigator.clipboard.writeText(output.value);
+      showToast('Copied!');
+    } catch {
+      showToast('Could not copy');
+    }
+  });
+
+  clearBtn.addEventListener('click', () => {
+    output.value = '';
+    output.focus();
+  });
+
+  function showToast(msg) {
+    toast.textContent = msg;
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 1400);
+  }
+
+  window.addEventListener('scroll', () => {
+    backToTop.style.display = window.scrollY > 200 ? 'block' : 'none';
+  });
+
+  backToTop.addEventListener('click', () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+</script>
+
+</body>
+</html>
+
+
