@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Contact — Gokberk Kuru</title>
+  <meta name="description" content="Contact page for Gokberk Kuru" />
+
+  <style>
+    :root{
+      --bg:#07120b; /* almost black green */
+      --card:#0b2a1f;
+      --accent:#04d361; /* digital green */
+      --muted:rgba(255,255,255,0.65);
+      --glass: rgba(255,255,255,0.03);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0;background:radial-gradient(ellipse at 10% 10%, rgba(4,211,97,0.06), transparent 8%), linear-gradient(180deg,#04110a 0%, var(--bg) 60%);color:#e6fff3}
+
+    .container{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:40px}
+
+    .card{
+      width:100%;max-width:920px;padding:34px;border-radius:18px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));box-shadow:0 8px 30px rgba(2,8,6,0.6);backdrop-filter: blur(6px);border:1px solid rgba(4,211,97,0.06);
+      display:grid;grid-template-columns:1fr 420px;gap:28px;align-items:start
+    }
+
+    @media (max-width:900px){.card{grid-template-columns:1fr;padding:22px} }
+
+    .left h1{font-size:28px;margin:0 0 6px 0;letter-spacing:-0.4px}
+    .left p{color:var(--muted);margin-top:0;margin-bottom:18px}
+
+    .contact-form{display:grid;gap:12px}
+    .row{display:flex;gap:12px}
+    .field{background:var(--glass);padding:12px;border-radius:10px;border:1px solid rgba(255,255,255,0.02)}
+    input[type="text"], input[type="email"], textarea{width:100%;background:transparent;border:0;outline:none;color:inherit;font-size:14px}
+    textarea{min-height:140px;resize:vertical}
+
+    .label{font-size:12px;color:var(--muted);margin-bottom:6px}
+
+    .right{display:flex;flex-direction:column;gap:14px;align-items:stretch}
+    .card-accent{padding:18px;border-radius:12px;background:linear-gradient(180deg, rgba(4,211,97,0.03), rgba(4,211,97,0.015));border:1px solid rgba(4,211,97,0.08)}
+
+    .send-btn{display:inline-flex;align-items:center;gap:10px;padding:12px 16px;border-radius:10px;background:linear-gradient(90deg,var(--accent),#2edc84);color:#04210f;font-weight:600;border:0;cursor:pointer;box-shadow:0 6px 18px rgba(2,8,6,0.5);text-decoration:none}
+    .ghost{background:transparent;border:1px solid rgba(255,255,255,0.06);padding:10px 12px;border-radius:10px;color:var(--muted);cursor:pointer}
+
+    .meta{font-size:13px;color:var(--muted)}
+    .email-line{display:flex;align-items:center;justify-content:space-between;gap:8px}
+
+    .small{font-size:12px;color:rgba(255,255,255,0.55)}
+
+    .footer-note{margin-top:14px;font-size:12px;color:rgba(255,255,255,0.48)}
+
+    /* subtle focus styles */
+    input:focus,textarea:focus{box-shadow:0 0 0 4px rgba(4,211,97,0.06);border:1px solid rgba(4,211,97,0.18)}
+
+    /* floating glyph */
+    .logo{display:inline-grid;place-items:center;width:48px;height:48px;border-radius:10px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border:1px solid rgba(4,211,97,0.06);font-weight:700;color:var(--accent);font-size:18px}
+
+    .copy-success{color:var(--accent);font-weight:600}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="card" role="main">
+      <div class="left">
+        <div style="display:flex;gap:12px;align-items:center;margin-bottom:14px">
+          <div class="logo" aria-hidden="true">GK</div>
+          <div>
+            <h1>Contact Gokberk Kuru</h1>
+            <p>Have a question, collaboration or just want to say hi? Send a message — I'll reply as soon as I can.</p>
+          </div>
+        </div>
+
+        <form id="contactForm" class="contact-form" onsubmit="event.preventDefault(); sendEmail();">
+          <div>
+            <div class="label">Your name</div>
+            <div class="field"><input id="name" type="text" placeholder="Your full name" required></div>
+          </div>
+
+          <div>
+            <div class="label">Your email</div>
+            <div class="field"><input id="fromEmail" type="email" placeholder="gokberk52258@gmail.com" required></div>
+          </div>
+
+          <div>
+            <div class="label">Subject</div>
+            <div class="field"><input id="subject" type="text" placeholder="What is this about?" required></div>
+          </div>
+
+          <div>
+            <div class="label">Message</div>
+            <div class="field"><textarea id="message" placeholder="Write your message here..." required></textarea></div>
+          </div>
+
+          <div style="display:flex;gap:10px;align-items:center;margin-top:6px">
+            <button class="send-btn" type="submit" aria-label="Send message">
+              <!-- SVG paper-plane -->
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M22 2L11 13" stroke="black" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M22 2L15 22L11 13L2 9L22 2Z" stroke="black" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              Send message
+            </button>
+
+            <button type="button" class="ghost" onclick="openMailClient()">Open email client</button>
+          </div>
+
+        </form>
+
+        <div class="footer-note">If the "Send message" button doesn't open an email client, use the copy button on the right to copy the email address and send your message from any webmail.</div>
+      </div>
+
+      <aside class="right">
+        <div class="card-accent">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:12px">
+            <div>
+              <div class="meta">Direct email</div>
+              <div style="margin-top:6px;font-weight:700;font-size:15px">gokberk.kuru@example.com</div>
+              <div class="small" style="margin-top:6px">Replace the email above with your Gmail in the file (see the comment in the HTML). You can also click "Copy" to copy it to clipboard.</div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:8px;align-items:flex-end">
+              <button class="ghost" id="copyBtn" onclick="copyEmail()">Copy</button>
+              <div id="copyStatus" class="small" aria-live="polite"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card-accent" style="padding-top:12px">
+          <div class="meta">Other info</div>
+          <div style="margin-top:8px" class="small">Prefer encryption? Add PGP in your email. This page uses a mailto: action which opens the user's email client. For server-side sending (no mail client), integrate an API (Formspree, Netlify Forms or your own backend).</div>
+        </div>
+
+      </aside>
+    </div>
+  </div>
+
+  <script>
+    // ====== IMPORTANT ======
+    // Replace the placeholder email below with your Gmail address (for example: 'gokberk.kuru@gmail.com')
+    // This file uses mailto: to open the visitor's email client. If you'd rather receive messages without relying on
+    // a client, integrate a server-side endpoint or a form service such as Formspree, Netlify Forms, etc.
+    const RECIPIENT_EMAIL = 'gokberk52258@gmail.com'; // <-- replace this with YOUR GMAIL address
+
+    // Helper: encode and open mailto
+    function sendEmail(){
+      const name = document.getElementById('name').value.trim();
+      const from = document.getElementById('fromEmail').value.trim();
+      const subject = document.getElementById('subject').value.trim();
+      const message = document.getElementById('message').value.trim();
+
+      const bodyLines = [];
+      bodyLines.push('From: ' + name + ' <' + from + '>');
+      bodyLines.push('---');
+      bodyLines.push(message);
+      bodyLines.push('\n\n---\nSent from contact page');
+
+      const mailto = `mailto:${encodeURIComponent(RECIPIENT_EMAIL)}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(bodyLines.join('\n'))}`;
+
+      // Try opening mail client
+      window.location.href = mailto;
+
+      // If window location didn't open (e.g. in some browsers), also show a clickable link in console
+      console.log('If nothing opened, try copying this link and pasting in your address bar:', mailto);
+    }
+
+    function openMailClient(){
+      const mailto = `mailto:${encodeURIComponent(RECIPIENT_EMAIL)}`;
+      window.location.href = mailto;
+    }
+
+    function copyEmail(){
+      navigator.clipboard.writeText(RECIPIENT_EMAIL).then(()=>{
+        const status = document.getElementById('copyStatus');
+        status.textContent = 'Copied!';
+        status.classList.add('copy-success');
+        setTimeout(()=>{ status.textContent=''; status.classList.remove('copy-success'); }, 2400);
+      }).catch(()=>{
+        const status = document.getElementById('copyStatus');
+        status.textContent = 'Copy failed — please select and copy manually.';
+        setTimeout(()=>{ status.textContent=''; }, 2400);
+      })
+    }
+
+    // Show the email in the UI from the constant so it's easy to find in one place
+    document.addEventListener('DOMContentLoaded', ()=>{
+      const el = document.querySelector('.card-accent div > div > div:nth-child(2)');
+      if(el) el.textContent = RECIPIENT_EMAIL;
+    });
+  </script>
+</body>
+</html>
